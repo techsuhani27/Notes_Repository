@@ -1,0 +1,29 @@
+# Python virtual environment
+venv/
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Flask temp files and database
+instance/
+*.sqlite
+.flaskenv
+
+# React build and node modules
+frontend/node_modules/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/.env.local
+
+# Operating System generated files
+.DS_Store
+.vscode/
+
+# File uploads (for your project)
+backend/uploads/
