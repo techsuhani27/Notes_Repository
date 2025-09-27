@@ -25,7 +25,8 @@ function App() {
 
   const fetchNotes = async () => {
     try {
-      const response = await axios.get('/notes');
+      const apiUrl = process.env.REACT_APP_API_URL || '';
+      const response = await axios.get(`${apiUrl}/notes`);
       setNotes(response.data);
     } catch (error) {
       console.error('Error fetching notes:', error);
@@ -35,7 +36,8 @@ function App() {
   const fetchSubjects = async () => {
     try {
       console.log('Fetching subjects...');
-      const response = await axios.get('/subjects');
+      const apiUrl = process.env.REACT_APP_API_URL || '';
+      const response = await axios.get(`${apiUrl}/subjects`);
       console.log('Subjects response:', response.data);
       setSubjects(response.data);
     } catch (error) {
@@ -83,7 +85,8 @@ function App() {
     try {
       console.log('Submitting note with data:', { title, content, subject, tags, file: file?.name });
       
-      const response = await axios.post('/notes/upload', formData, {
+      const apiUrl = process.env.REACT_APP_API_URL || '';
+      const response = await axios.post(`${apiUrl}/notes/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

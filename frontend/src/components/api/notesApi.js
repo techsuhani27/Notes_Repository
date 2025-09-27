@@ -1,14 +1,14 @@
 import axios from 'axios';
 
 // Base API configuration
-const API_BASE_URL = '/'; // Using proxy configuration
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Notes API functions
 export const notesApi = {
   // Get all notes
   getAllNotes: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}notes`);
+      const response = await axios.get(`${API_BASE_URL}/notes`);
       return response.data;
     } catch (error) {
       console.error('Error fetching notes:', error);
@@ -28,7 +28,7 @@ export const notesApi = {
         formData.append('file', noteData.file);
       }
 
-      const response = await axios.post(`${API_BASE_URL}notes/upload`, formData, {
+      const response = await axios.post(`${API_BASE_URL}/notes/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -48,7 +48,7 @@ export const notesApi = {
       if (subject) params.append('subject', subject);
       if (tag) params.append('tag', tag);
       
-      const response = await axios.get(`${API_BASE_URL}notes/search?${params}`);
+      const response = await axios.get(`${API_BASE_URL}/notes/search?${params}`);
       return response.data;
     } catch (error) {
       console.error('Error searching notes:', error);
@@ -59,7 +59,7 @@ export const notesApi = {
   // Delete a note
   deleteNote: async (noteId) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}notes/${noteId}`);
+      const response = await axios.delete(`${API_BASE_URL}/notes/${noteId}`);
       return response.data;
     } catch (error) {
       console.error('Error deleting note:', error);
@@ -73,7 +73,7 @@ export const subjectsApi = {
   // Get all subjects
   getAllSubjects: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}subjects`);
+      const response = await axios.get(`${API_BASE_URL}/subjects`);
       return response.data;
     } catch (error) {
       console.error('Error fetching subjects:', error);
@@ -84,7 +84,7 @@ export const subjectsApi = {
   // Create a new subject
   createSubject: async (name) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}subjects`, { name });
+      const response = await axios.post(`${API_BASE_URL}/subjects`, { name });
       return response.data;
     } catch (error) {
       console.error('Error creating subject:', error);
@@ -98,7 +98,7 @@ export const tagsApi = {
   // Get all tags
   getAllTags: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}tags`);
+      const response = await axios.get(`${API_BASE_URL}/tags`);
       return response.data;
     } catch (error) {
       console.error('Error fetching tags:', error);
