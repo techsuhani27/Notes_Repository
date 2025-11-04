@@ -1,18 +1,28 @@
-# Configuration for the Flask app
+# Environment Configuration for Production and Development
 import os
 
 # Get the directory of this config file
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-# Database connection URI - using absolute path for SQLite
-SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-    'sqlite:///' + os.path.join(basedir, 'instance', 'notes.db')
-# For PostgreSQL, use a connection string like this:
-# SQLALCHEMY_DATABASE_URI = 'postgresql://user:password@host:port/database'
+# Database configuration - Production ready
+if os.environ.get('DATABASE_URL'):
+    # Production database (PostgreSQL on Heroku/Railway)
+    db_url = os.environ.get('DATABASE_URL')
+    if db_url.startswith('postgres://'):
+        db_url = db_url.replace('postgres://', 'postgresql://', 1)
+    SQLALCHEMY_DATABASE_URI = db_url
+else:
+    # Development database (SQLite)
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'instance', 'notes.db')
+
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 # Directory for file uploads
 UPLOAD_FOLDER = os.path.join(basedir, 'uploads')
-# Ensure the uploads and instance folders exist
+
+# Ensure directories exist
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(os.path.join(basedir, 'instance'), exist_ok=True)
+
+# Secret key for sessions (use environment variable in production)
+SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-secret-key-change-in-production'

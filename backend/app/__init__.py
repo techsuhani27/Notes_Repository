@@ -11,7 +11,13 @@ def create_app():
     
     # Initialize extensions
     db.init_app(app)
-    CORS(app)  # Enable CORS for all routes
+    
+    # Configure CORS for production
+    CORS(app, origins=[
+        "http://localhost:3000",  # Local development
+        "https://*.railway.app",  # Railway frontend URLs (wildcard)
+        "https://your-frontend-xxx.railway.app",  # Replace with actual URL
+    ])
     
     from .routes import main_blueprint
     app.register_blueprint(main_blueprint)

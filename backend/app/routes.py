@@ -158,3 +158,30 @@ def get_tags():
     tags = Tag.query.all()
     tags_list = [{'id': tag.id, 'name': tag.name} for tag in tags]
     return jsonify(tags_list)
+
+@main_blueprint.route('/init-db', methods=['POST'])
+def initialize_database():
+    """Initialize database with default subjects (for deployment)"""
+    try:
+        # Default subjects
+        default_subjects = [
+            "Computer Science", "Mathematics", "Physics", "Programming",
+            "Web Development", "Data Science", "Machine Learning", "Database Design"
+        ]
+        
+        created_count = 0
+        for subject_name in default_subjects:
+            existing = Subject.query.filter_by(name=subject_name).first()
+            if not existing:
+                new_subject = Subject(name=subject_name)
+                db.session.add(new_subject)
+                created_count += 1
+        
+        db.session.commit()
+        return jsonify({
+            "message": f"Database initialized successfully. Created {created_count} subjects.",
+            "total_subjects": Subject.query.count()
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
